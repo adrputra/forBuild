@@ -9,9 +9,9 @@ def getInstagramAPI(tag,links):
         querystring = {"post":"https://www.instagram.com/p/%s/"%id}
 
         headers = {
-            "X-RapidAPI-Key": "1f967b9464msh5407fccd5d26aecp1600ecjsn0ccbe1b6659d",
-            "X-RapidAPI-Host": "instagram-data1.p.rapidapi.com"
-        }
+                "X-RapidAPI-Key": "a55e034d55mshbc70cc52c774ecfp169a4ejsn4ccf9fef4b1c",
+                "X-RapidAPI-Host": "instagram-data1.p.rapidapi.com"
+            }
 
         response = requests.request("GET", url, headers=headers, params=querystring).text
         print(response)
