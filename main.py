@@ -24,6 +24,9 @@ dirPath = ""
 tiktokCookiePath = r"tiktokCookie.txt"
 instagramCookiePath = r"instagramCookie.txt"
 
+def  test(a):
+    print(a)
+
 def Controller(tag,n,path,platform):
     global dirPath
     dirPath = path

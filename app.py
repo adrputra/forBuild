@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog
-import main
+# import main
+import subprocess
+import sys
 
 hastag = ""
 count = 0
@@ -19,15 +21,21 @@ def setHastag():
 
 def initiateYoutube():
     print("Initiating youtube...", hastag, count)
-    main.Controller(hastag, count, dir, "Youtube")
+    # main.Controller(hastag, count, dir, "Youtube")
+    command = f"from main import Controller; Controller('{hastag}', {count}, '{dir}', 'Youtube')"
+    subprocess.run(['python', '-c', '%s'%command])
 
 def initiateTiktok():
     print("Initiating Tiktok...", hastag, count)
-    main.Controller(hastag, count, dir, "Tiktok")
+    # main.Controller(hastag, count, dir, "Tiktok")
+    command = f"from main import Controller; Controller('{hastag}', {count}, '{dir}', 'Tiktok')"
+    subprocess.run(['python', '-c', '%s'%command])
 
 def initiateInstagram():
     print("Initiating Instagram...", hastag, count)
-    main.Controller(hastag, count, dir, "Instagram")
+    # main.Controller(hastag, count, dir, "Instagram")
+    command = f"from main import Controller; Controller('{hastag}', {count}, '{dir}', 'Instagram')"
+    subprocess.run(['python', '-c', '%s'%command])
 
 def getDir():
     print("Getting Dir")
