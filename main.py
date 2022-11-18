@@ -69,7 +69,7 @@ def TikTok(tag,n):
             print(id)
             vId.append(id.split('/')[5])
             # driver.execute_script("window.scrollBy(0, 5000)")
-            if i+1%10 == 0:
+            if (i+1)%10 == 0:
                 driver.find_element_by_xpath("//button[@data-e2e='search-load-more']").click()
             driver.implicitly_wait(1)
     except NoSuchElementException:
@@ -111,22 +111,32 @@ def Youtube(tag,n):
     cleanFileData("Youtube")
     driver.get(f"https://www.youtube.com/results?search_query=%23{tag}&sp=CAMSAhABQgUSA2cyMA%253D%253D")
     links = []
+    vidTag = []
+
+    if n%20 == 0:
+        nCount = n//20
+    else:
+        nCount = (n//20)+1
+
     try:
-        for i in range(n):
-            link = driver.find_element_by_xpath(f"//div[@id='primary']//ytd-video-renderer[{i+1}]//div[@id='dismissible']//a[@id='video-title']").get_attribute('href')
-            print(link)
-            if "shorts" in link:
-                continue
-            else:
-                links.append(link.split('=')[1])
-                driver.execute_script("window.scrollBy(0, 5000)")
-                time.sleep(2)
-    except NoSuchElementException:
-        print("NoSuchElementExecption")
-        getLikesYoutubeAPI(tag, breakList(links))
+        for i in range(nCount):
+            for j in range(20):
+                link = driver.find_element_by_xpath(f"//div[@id='primary']//ytd-item-section-renderer[{i+1}]//ytd-video-renderer[{j+1}]//div[@id='dismissible']//a[@id='video-title']").get_attribute('href')
+                print(link)
+                if "shorts" in link:
+                    links.append(link.split('/')[4])
+                    vidTag.append("S")
+                else:
+                    links.append(link.split('=')[1])
+                    vidTag.append("V")
+            driver.execute_script("window.scrollBy(0, 10000)")
+            time.sleep(3)
+        getLikesYoutubeAPI(tag, breakList(links), vidTag)
+    except NoSuchElementException as e:
+        print("NoSuchElementExecption", str(e))
+        getLikesYoutubeAPI(tag, breakList(links), vidTag)
         
     print(links)
-    getLikesYoutubeAPI(tag, breakList(links))
 
 def breakList(my_list):
     n=50
@@ -137,8 +147,9 @@ def cleanFileData(platform):
     clean1 = open(f"{dirPath}\{platform}_Get_Data_Result"+".txt","w", encoding='utf-8')
     clean2 = open(f"{dirPath}\{platform}_VideoID.txt","w",encoding='utf-8')
 
-def getLikesYoutubeAPI(tag, videoID):
+def getLikesYoutubeAPI(tag, videoID, vidTag):
     # resp = json.load(youtubeAPI.main(videoID))
+    vidTagIndex = 0
     for i in range(len(videoID)):
         resp = youtubeAPI.main(videoID[i])
         data = []
@@ -157,8 +168,10 @@ def getLikesYoutubeAPI(tag, videoID):
                 else:
                     likeCount = 0
                 commentCount = item['statistics']['commentCount']
-                data.append([vid,title,viewCount,likeCount,commentCount,tag,channel])
-            except KeyError:
+                data.append([vid,title,viewCount,likeCount,commentCount,tag,channel,vidTag[vidTagIndex]])
+                vidTagIndex += 1
+            except KeyError as e:
+                print("KeyError", str(e))
                 continue
         # print(data)
         writeToFile(data,videoID[i],"Y")
@@ -170,10 +183,11 @@ def writeToFile(data,videoID,platform):
     if platform == "Y":
         result = open(f"{dirPath}\Youtube_Get_Data_Result.txt","w+", encoding='utf-8')
         for val in data:
-            result.writelines(f"{val[0]};;{val[1]};;{val[2]};;{val[3]};;{val[4]};;{val[5]};;{val[6]};;\n")
+            result.writelines(f"{val[0]};;{val[1]};;{val[2]};;{val[3]};;{val[4]};;{val[5]};;{val[6]};;{val[7]};;\n")
         saveVideoID = open(f"{dirPath}\Youtube_VideoID.txt","w+",encoding='utf-8')
         for val in videoID:
             saveVideoID.writelines(f"{val};")
+        print("Written Youtube Data")
     elif platform == "T":
         result = open(f"{dirPath}\Tiktok_Get_Data_Result.txt","w+", encoding='utf-8')
         for val in data:
@@ -181,6 +195,7 @@ def writeToFile(data,videoID,platform):
         saveVideoID = open(f"{dirPath}\Tiktok_VideoID.txt","w+",encoding='utf-8')
         for val in videoID:
             saveVideoID.writelines(f"{val};")
+        print("Written Tiktok Data")
     elif platform == "I":
         result = open(f"{dirPath}\Instagram_Get_Data_Result.txt","w+", encoding='utf-8')
         for val in data:
@@ -188,6 +203,7 @@ def writeToFile(data,videoID,platform):
         saveVideoID = open(f"{dirPath}\Instagram_VideoID.txt","w+",encoding='utf-8')
         for val in videoID:
             saveVideoID.writelines(f"{val};")
+        print("Written Instagram Data")
 
 def Instagram(tag, n):
     cleanFileData("Instagram")
