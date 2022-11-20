@@ -19,7 +19,7 @@ import pickle
 PATH = "chromedriver.exe"
 options = webdriver.ChromeOptions()
 # options.add_argument(f'user-agent={userAgent}')
-options.headless = True
+options.headless = False
 driver = webdriver.Chrome(executable_path=PATH, options=options)
 dirPath = ""
 tiktokCookiePath = r"tiktokCookie.txt"
@@ -49,6 +49,7 @@ def load_cookie(driver, path):
     print('Cookie loaded')
 
 def TikTok(tag,n):
+    cleanFileData("Tiktok")
     driver.maximize_window()
     driver.get(f"https://www.tiktok.com/search/video?q=%23{tag}")
     driver.implicitly_wait(5)
@@ -72,12 +73,14 @@ def TikTok(tag,n):
             # driver.execute_script("window.scrollBy(0, 5000)")
             if (i+1)%10 == 0:
                 driver.find_element_by_xpath("//button[@data-e2e='search-load-more']").click()
+                time.sleep(1.234)
             driver.implicitly_wait(1)
-    except NoSuchElementException:
-        print("NoSuchElementException")
+        result = getTikTokAPI(tag, vId)
+    except NoSuchElementException as e:
+        print("NoSuchElementException", str(e))
+        result = getTikTokAPI(tag, vId)
     
     print(vId)
-    result = getTikTokAPI(tag, vId)
     writeToFile(result, vId, "T")
     messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Tiktok")
     print("COMPLETE TIKTOK")
@@ -90,9 +93,13 @@ def getTikTokAPI(tag, vId):
     for id in vId:
         try:
             vidInfo = api.video(id=f'{id}').info()
-            vidInfoData = json.dumps(vidInfo).replace("\'","\"")
-            data.append(parseData(tag,json.loads(vidInfoData)))
-        except:
+            print(vidInfo)
+            vidInfoData = json.dumps(vidInfo).replace("'",'"')
+            # data.append(parseData(tag,json.loads(vidInfoData)))
+            print(vidInfoData)
+            time.sleep(0.431)
+        except Exception as e:
+            print(str(e))
             continue
     print(data)
     return data
@@ -132,8 +139,9 @@ def Youtube(tag,n):
                 else:
                     links.append(link.split('=')[1])
                     vidTag.append("V")
-            driver.execute_script("window.scrollBy(0, 10000)")
-            time.sleep(3)
+                driver.execute_script("window.scrollBy(0, 10000)")
+                time.sleep(0.748)
+                # <yt-formatted-string id="message" class="style-scope ytd-message-renderer">No more results</yt-formatted-string>
         getLikesYoutubeAPI(tag, breakList(links), vidTag)
     except NoSuchElementException as e:
         print("NoSuchElementExecption", str(e))
@@ -185,26 +193,26 @@ def writeToFile(data,videoID,platform):
     dt = datetime.now()
     ts = datetime.timestamp(dt)
     if platform == "Y":
-        result = open(f"{dirPath}\Youtube_Get_Data_Result.txt","w+", encoding='utf-8')
+        result = open(f"{dirPath}\Youtube_Get_Data_Result.txt","a+", encoding='utf-8')
         for val in data:
             result.writelines(f"{val[0]};;{val[1]};;{val[2]};;{val[3]};;{val[4]};;{val[5]};;{val[6]};;{val[7]};;\n")
-        saveVideoID = open(f"{dirPath}\Youtube_VideoID.txt","w+",encoding='utf-8')
+        saveVideoID = open(f"{dirPath}\Youtube_VideoID.txt","a+",encoding='utf-8')
         for val in videoID:
             saveVideoID.writelines(f"{val};")
         print("Written Youtube Data")
     elif platform == "T":
-        result = open(f"{dirPath}\Tiktok_Get_Data_Result.txt","w+", encoding='utf-8')
+        result = open(f"{dirPath}\Tiktok_Get_Data_Result.txt","a+", encoding='utf-8')
         for val in data:
             result.writelines(f"{val[0]};;{val[1]};;{val[2]};;{val[3]};;{val[4]};;{val[5]};;{val[6]};;\n")
-        saveVideoID = open(f"{dirPath}\Tiktok_VideoID.txt","w+",encoding='utf-8')
+        saveVideoID = open(f"{dirPath}\Tiktok_VideoID.txt","a+",encoding='utf-8')
         for val in videoID:
             saveVideoID.writelines(f"{val};")
         print("Written Tiktok Data")
     elif platform == "I":
-        result = open(f"{dirPath}\Instagram_Get_Data_Result.txt","w+", encoding='utf-8')
+        result = open(f"{dirPath}\Instagram_Get_Data_Result.txt","a+", encoding='utf-8')
         for val in data:
             result.writelines(f"{val[0]};;{val[1]};;{val[2]};;{val[3]};;{val[4]};;{val[5]};;{val[6]};;\n")
-        saveVideoID = open(f"{dirPath}\Instagram_VideoID.txt","w+",encoding='utf-8')
+        saveVideoID = open(f"{dirPath}\Instagram_VideoID.txt","a+",encoding='utf-8')
         for val in videoID:
             saveVideoID.writelines(f"{val};")
         print("Written Instagram Data")
@@ -232,11 +240,14 @@ def Instagram(tag, n):
                 id = driver.find_element_by_xpath(f"//article//div[2]//div[@class='_ac7v _aang'][{i+1}]//div[@class='_aabd _aa8k _aanf'][{j+1}]//a").get_attribute('href')
                 print(id)
                 igID.append(id.split("/")[4])
+            driver.execute_script("window.scrollBy(0, 10000)")
+            time.sleep(3)
+        result = instagramAPI.getInstagramAPI(tag,igID)
     except NoSuchElementException:
         print("NoSuchElementException")
+        result = instagramAPI.getInstagramAPI(tag,igID)
     
     print(igID)
-    result = instagramAPI.getInstagramAPI(tag,igID)
     writeToFile(result, igID, "I")
     messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Instagram")
     print("COMPLETE INSTAGRAM")
