@@ -100,7 +100,7 @@ def getTikTokAPI(tag, vId):
 def parseData(tag,data):
     try:
         vId = data['video']['id']
-        author = data['author']['nickname']
+        author = data['author']['uniqueId']
         commentCount = data['stats']['commentCount']
         likeCount = data['stats']['diggCount']
         viewCount = data['stats']['playCount']
