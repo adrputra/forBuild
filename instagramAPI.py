@@ -14,7 +14,7 @@ def getInstagramAPI(tag,links):
             }
 
         response = requests.request("GET", url, headers=headers, params=querystring).text
-        print(response)
+        # print(response)
         data.append(parseInstagramResponse(tag,json.loads(response)))
     print(data)
     return data

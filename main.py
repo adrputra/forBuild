@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from datetime import datetime
 from TikTokApi import TikTokApi
+from tkinter import messagebox
 import subprocess
 import sys
 import os
@@ -18,7 +19,7 @@ import pickle
 PATH = "chromedriver.exe"
 options = webdriver.ChromeOptions()
 # options.add_argument(f'user-agent={userAgent}')
-options.headless = False
+options.headless = True
 driver = webdriver.Chrome(executable_path=PATH, options=options)
 dirPath = ""
 tiktokCookiePath = r"tiktokCookie.txt"
@@ -78,6 +79,8 @@ def TikTok(tag,n):
     print(vId)
     result = getTikTokAPI(tag, vId)
     writeToFile(result, vId, "T")
+    messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Tiktok")
+    print("COMPLETE TIKTOK")
 
 def getTikTokAPI(tag, vId):
     subprocess.run(["python", "-m", "playwright", "install"])
@@ -175,7 +178,8 @@ def getLikesYoutubeAPI(tag, videoID, vidTag):
                 continue
         # print(data)
         writeToFile(data,videoID[i],"Y")
-    print("COMPLETE")
+    messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Youtube")
+    print("COMPLETE YOUTUBE")
 
 def writeToFile(data,videoID,platform):
     dt = datetime.now()
@@ -234,6 +238,8 @@ def Instagram(tag, n):
     print(igID)
     result = instagramAPI.getInstagramAPI(tag,igID)
     writeToFile(result, igID, "I")
+    messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Instagram")
+    print("COMPLETE INSTAGRAM")
     
 # Youtube("indonesia",100,"D:/ADR/Personal/ADR/Self-Project/Test/get-data-selenium-build/data")
 # TikTok("g20", 2)
