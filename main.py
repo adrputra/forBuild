@@ -72,6 +72,8 @@ def TikTok(tag,n):
             vId.append(id.split('/')[5])
             # driver.execute_script("window.scrollBy(0, 5000)")
             if (i+1)%10 == 0:
+                ignored_exceptions=(NoSuchElementException,StaleElementReferenceException)
+                WebDriverWait(driver, 60,ignored_exceptions=ignored_exceptions).until(expected_conditions.presence_of_element_located((By.XPATH, "//button[@data-e2e='search-load-more']")))
                 driver.find_element_by_xpath("//button[@data-e2e='search-load-more']").click()
                 time.sleep(1.234)
             driver.implicitly_wait(1)
@@ -93,10 +95,9 @@ def getTikTokAPI(tag, vId):
     for id in vId:
         try:
             vidInfo = api.video(id=f'{id}').info()
-            print(vidInfo)
-            vidInfoData = json.dumps(vidInfo).replace("'",'"')
+            # vidInfoData = json.dumps(vidInfo).replace("'",'"')
             # data.append(parseData(tag,json.loads(vidInfoData)))
-            print(vidInfoData)
+            data.append(parseData(tag,vidInfo))
             time.sleep(0.431)
         except Exception as e:
             print(str(e))
