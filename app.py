@@ -16,7 +16,7 @@ def setHastag():
     count = int(inputCount.get())
     dir = inputDir.cget("text")
     label = tk.Label(frame, text=f"Hastag : {hastag}. Count : {count}. Dir : {dir}")
-    label.grid(row=10,column=1)
+    label.grid(row=11,column=1)
     print(label)
 
 def initiateYoutube():
@@ -35,6 +35,18 @@ def initiateInstagram():
     print("Initiating Instagram...", hastag, count)
     # main.Controller(hastag, count, dir, "Instagram")
     command = f"from main import Controller; Controller('{hastag}', {count}, '{dir}', 'Instagram')"
+    subprocess.run(['python', '-c', '%s'%command])
+
+def initiateInstagramV2():
+    print("Initiating Instagram...", hastag, count)
+    # main.Controller(hastag, count, dir, "Instagram")
+    command = f"from main import Controller; Controller('{hastag}', {count}, '{dir}', 'InstagramV2')"
+    subprocess.run(['python', '-c', '%s'%command])
+
+def initiateFacebook():
+    print("Initiating Facebook...", hastag, count)
+    # main.Controller(hastag, count, dir, "Instagram")
+    command = f"from main import Controller; Controller('{hastag}', {count}, '{dir}', 'Facebook')"
     subprocess.run(['python', '-c', '%s'%command])
 
 def getDir():
@@ -71,7 +83,9 @@ setHastagButton = tk.Button(frame, text="Set Config", padx=10, pady=5, fg="white
 
 startYoutube = tk.Button(frame, text="Start Youtube", padx=10, pady=5, fg="white", bg="#4287f5", command=initiateYoutube).grid(row=6,column=0,columnspan=2, pady=(0,10))
 startTiktok = tk.Button(frame, text="Start Tiktok", padx=10, pady=5, fg="white", bg="#4287f5", command=initiateTiktok).grid(row=7,column=0,columnspan=2, pady=(0,10))
-startInstagram = tk.Button(frame, text="Start Instagram", padx=10, pady=5, fg="white", bg="#4287f5", command=initiateInstagram).grid(row=8,column=0,columnspan=2, pady=(0,20))
+startInstagram = tk.Button(frame, text="Start Instagram", padx=10, pady=5, fg="white", bg="#4287f5", command=initiateInstagram).grid(row=8,column=0,columnspan=2, pady=(0,10))
+startInstagramV2 = tk.Button(frame, text="Start Instagram V2", padx=10, pady=5, fg="white", bg="#4287f5", command=initiateInstagramV2).grid(row=9,column=0,columnspan=2, pady=(0,10))
+startFacebook = tk.Button(frame, text="Start Facebook", padx=10, pady=5, fg="white", bg="#4287f5", command=initiateFacebook).grid(row=10,column=0,columnspan=2, pady=(0,20))
 
 frame.place(relwidth=0.8, relheight=0.8, relx=0.5, rely=0.5, anchor="center")
 frame.pack()

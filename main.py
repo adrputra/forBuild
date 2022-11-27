@@ -13,6 +13,7 @@ import os
 import json
 import youtubeAPI
 import instagramAPI
+import gsheetAPI
 import time
 import pickle
 
@@ -39,8 +40,10 @@ def Controller(tag,n,path,platform):
             TikTok(tag,n)
         case "Instagram":
             Instagram(tag,n)
+        case "InstagramV2":
+            InstagramV2(tag,n)
         case "Facebook":
-            print("Facebook")
+            Facebook(tag,n)
 
 def load_cookie(driver, path):
     with open(path, 'rb') as cookiesfile:
@@ -218,6 +221,14 @@ def writeToFile(data,videoID,platform):
         for val in videoID:
             saveVideoID.writelines(f"{val};")
         print("Written Instagram Data")
+    elif platform == "F":
+        result = open(f"{dirPath}\Facebook_Get_Data_Result.txt","a+", encoding='utf-8')
+        for val in data:
+            result.writelines(f"{val[0]};;{val[1]};;{val[2]};;{val[3]};;{val[4]};;{val[5]};;\n")
+        saveVideoID = open(f"{dirPath}\Facebook_VideoID.txt","a+",encoding='utf-8')
+        for val in videoID:
+            saveVideoID.writelines(f"{val};")
+        print("Written Facebook Data")
 
 def Instagram(tag, n):
     cleanFileData("Instagram")
@@ -253,6 +264,15 @@ def Instagram(tag, n):
     writeToFile(result, igID, "I")
     messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Instagram")
     print("COMPLETE INSTAGRAM")
+
+def InstagramV2(tag,n):
+    cleanFileData("Instagram")
+    igID = gsheetAPI.getDataSheet()
+    result = instagramAPI.getInstagramAPIv2(tag, igID)
+    print(igID)
+    writeToFile(result, igID, "I")
+    messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Instagram")
+    print("COMPLETE INSTAGRAM")
     
 def Facebook(tag, n):
     cleanFileData("Facebook")
@@ -266,20 +286,45 @@ def Facebook(tag, n):
     driver.implicitly_wait(5)
 
     data = []
+    links = []
 
     for i in range(n):
-        like = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//span[@class='x16hj40l']")
-        comment = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='xnfveip'][2]//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xi81zsa']")
-        share = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='xnfveip'][3]//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xi81zsa']")
-        isPresentLink = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[1]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//span[@dir='ltr'][1]//a").size() > 0
-        if isPresentLink:
-            postLink = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[1]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//span[@dir='ltr'][1]//a".get_attribute('href'))
-        else:
-            postLink = driver.find_element_by_xpath(f"")
+        try:
+            name = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[8]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//span[@dir='ltr'][1]//span[@class='xt0psk2']//span").text
+        except NoSuchElementException as e:
+            print("Name", str(e))
+            name = ""
+
+        try:
+            like = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//span[@class='x16hj40l']").text
+        except NoSuchElementException as e:
+            like = ""
+        
+        try:
+            comment = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='xnfveip'][2]//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xi81zsa']").text
+        except NoSuchElementException as e:
+            comment = ""
+
+        try:
+            share = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='xnfveip'][3]//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xi81zsa']").text
+        except NoSuchElementException as e:
+            share = ""
+
+        postLink = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//div[@class='xu06os2 x1ok221b'][2]//a").get_attribute('href')
+        links.append(postLink.split('/?')[0])
+        data.append([postLink.split('/?')[0], name, like, comment, share, tag])
+        driver.execute_script("window.scrollBy(0, 10000)")
+        time.sleep(1.732)
+
+    print(data)
+    writeToFile(data, links, "F")
+    messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Facebook")
+    print("COMPLETE FACEBOOK")
 
 
 
-# Youtube("indonesia",100,"D:/ADR/Personal/ADR/Self-Project/Test/get-data-selenium-build/data")
+# Facebook("worldcup2022",10,"D:/ADR/Personal/ADR/Self-Project/Test/forBuild/data")
+# Facebook("worldcup2022",10)
 # TikTok("g20", 2)
 
 # Instagram("tag", 2)
