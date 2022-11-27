@@ -24,6 +24,7 @@ driver = webdriver.Chrome(executable_path=PATH, options=options)
 dirPath = ""
 tiktokCookiePath = r"tiktokCookie.txt"
 instagramCookiePath = r"instagramCookie.txt"
+facebookCookiePath = r"facebookCookie.txt"
 
 def  test(a):
     print(a)
@@ -253,6 +254,31 @@ def Instagram(tag, n):
     messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Instagram")
     print("COMPLETE INSTAGRAM")
     
+def Facebook(tag, n):
+    cleanFileData("Facebook")
+    driver.maximize_window()
+    driver.get(f"https://www.facebook.com/hashtag/{tag}")
+    driver.implicitly_wait(5)
+    load_cookie(driver, facebookCookiePath)
+    time.sleep(2.7923)
+    driver.refresh()
+    time.sleep(1.2485)
+    driver.implicitly_wait(5)
+
+    data = []
+
+    for i in range(n):
+        like = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//span[@class='x16hj40l']")
+        comment = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='xnfveip'][2]//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xi81zsa']")
+        share = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='xnfveip'][3]//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xi81zsa']")
+        isPresentLink = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[1]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//span[@dir='ltr'][1]//a").size() > 0
+        if isPresentLink:
+            postLink = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[1]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//span[@dir='ltr'][1]//a".get_attribute('href'))
+        else:
+            postLink = driver.find_element_by_xpath(f"")
+
+
+
 # Youtube("indonesia",100,"D:/ADR/Personal/ADR/Self-Project/Test/get-data-selenium-build/data")
 # TikTok("g20", 2)
 

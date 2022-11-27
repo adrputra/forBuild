@@ -10,6 +10,7 @@ driver = webdriver.Chrome(executable_path=PATH, options=options)
 dirPath = ""
 tiktokCookiePath = "tiktokCookie.txt"
 instagramCookiePath = "instagramCookie.txt"
+facebookCookiePath = "facebookCookie.txt"
 
 def getCookieTiktok():
     driver.get("https://www.tiktok.com/")
@@ -34,5 +35,13 @@ def getCookieInstagram():
     print("COokie saved")
     driver.implicitly_wait(2)
 
-getCookieInstagram()
+def getCookieFacebook():
+    driver.get("https://www.facebook.com/")
+    time.sleep(60)
+    save_cookie(driver,facebookCookiePath)
+    print("COokie saved")
+    driver.implicitly_wait(2)
+
+# getCookieInstagram()
 # getCookieTiktok()
+getCookieFacebook()
