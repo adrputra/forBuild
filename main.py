@@ -288,33 +288,106 @@ def Facebook(tag, n):
     data = []
     links = []
 
-    for i in range(n):
+    def getName(i):
         try:
-            name = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[8]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//span[@dir='ltr'][1]//span[@class='xt0psk2']//span").text
+            print("Name",end=" ")
+            name = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//span[@dir='ltr'][1]//span[@class='xt0psk2']//span").text
+            print(name)
+            return name
         except NoSuchElementException as e:
             print("Name", str(e))
-            name = ""
+            return ""
 
+    def getLike(i):
         try:
+            print("Like",end=" ")
             like = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//span[@class='x16hj40l']").text
+            print(like)
+            return like
         except NoSuchElementException as e:
-            like = ""
-        
+            print("Like", str(e))
+            return ""
+    
+    def getComment(i):
         try:
+            print("Comment",end=" ")
             comment = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='xnfveip'][2]//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xi81zsa']").text
+            print(comment)
+            return comment
         except NoSuchElementException as e:
-            comment = ""
+            print("Comment", str(e))
+            return ""
 
+    def getShare(i):
         try:
+            print("Share",end=" ")
             share = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='xnfveip'][3]//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xi81zsa']").text
+            print(share)
+            return share
         except NoSuchElementException as e:
-            share = ""
+            print("Share", str(e))
+            return ""
+    
+    def getPostLink(i):
+        try:
+            postLink = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//div[@class='xu06os2 x1ok221b'][2]//a").get_attribute('href')
+            print(postLink)
+            return postLink
+        except NoSuchElementException as e:
+            print("PostLink", str(e))
+            return ""
+        
+    for i in range(1,n+1):
+        driver.implicitly_wait(10)
+        name = getName(i)
+        like = getLike(i)
+        comment = getComment(i)
+        share = getShare(i)
+        postLink = getPostLink(i)
 
-        postLink = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//div[@class='xu06os2 x1ok221b'][2]//a").get_attribute('href')
         links.append(postLink.split('/?')[0])
         data.append([postLink.split('/?')[0], name, like, comment, share, tag])
         driver.execute_script("window.scrollBy(0, 10000)")
+        print(name,like,comment,share,tag)
         time.sleep(1.732)
+
+    # for i in range(n):
+    #     print(i)
+    #     driver.implicitly_wait(10)
+    #     name,like,comment,share = "","","",""
+    #     try:
+    #         name = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//span[@dir='ltr'][1]//span[@class='xt0psk2']//span").text
+    #         print(name)
+    #     except NoSuchElementException as e:
+    #         print("Name", str(e))
+    #         continue
+
+    #     try:
+    #         like = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//span[@class='x16hj40l']").text
+    #         print(like)
+    #     except NoSuchElementException as e:
+    #         print("Like", str(e))
+    #         pass        
+    #     try:
+    #         comment = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='xnfveip'][2]//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xi81zsa']").text
+    #         print(comment)
+    #     except NoSuchElementException as e:
+    #         print("Comment", str(e))
+    #         pass
+
+    #     try:
+    #         share = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='xnfveip'][3]//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xi81zsa']").text
+    #         print(share)
+    #     except NoSuchElementException as e:
+    #         print("Share", str(e))
+    #         pass
+
+    #     postLink = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//div[@class='xu06os2 x1ok221b'][2]//a").get_attribute('href')
+    #     links.append(postLink.split('/?')[0])
+    #     data.append([postLink.split('/?')[0], name, like, comment, share, tag])
+    #     driver.execute_script("window.scrollBy(0, 10000)")
+    #     print(name,like,comment,share,tag)
+    #     time.sleep(1.732)
 
     print(data)
     writeToFile(data, links, "F")
@@ -324,7 +397,7 @@ def Facebook(tag, n):
 
 
 # Facebook("worldcup2022",10,"D:/ADR/Personal/ADR/Self-Project/Test/forBuild/data")
-# Facebook("worldcup2022",10)
+# Facebook("worldcup2022",5)
 # TikTok("g20", 2)
 
 # Instagram("tag", 2)
