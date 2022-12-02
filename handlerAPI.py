@@ -77,6 +77,18 @@ def parseInstagramResponse(tag,response):
                 # playCount = response['play_count']
                 likeCount = response['like_count']
                 commentCount = response['comment_count']
+
+                if id is None:
+                    id = ""
+                if username is None:
+                    username = ""
+                if viewCount is None:
+                    viewCount = ""
+                if likeCount is None:
+                    likeCount = ""
+                if commentCount is None:
+                    commentCount = ""
+                
                 return [id,username,viewCount,"",likeCount,commentCount,tag]
             else:
                 id = response['code']
@@ -85,6 +97,16 @@ def parseInstagramResponse(tag,response):
                 # playCount = response['play_count']
                 likeCount = response['like_count']
                 commentCount = response['comment_count']
+
+                if id is None:
+                    id = ""
+                if username is None:
+                    username = ""
+                if likeCount is None:
+                    likeCount = ""
+                if commentCount is None:
+                    commentCount = ""
+
                 return [id,username,"","",likeCount,commentCount,tag]
 
         except KeyError as e:
@@ -101,7 +123,9 @@ def YoutubeAPI(videoID):
     api_service_name = "youtube"
     api_version = "v3"
     # client_secrets_file = "client_secret_80453553129-rh62lfh4b51eu42jqbpcjqdiooc2cs01.apps.googleusercontent.com.json"
-    api_key = "AIzaSyCfdFlQbSZorzCoSMTsM2cV_3UM3nDO5DI"
+    # api_key = "AIzaSyCfdFlQbSZorzCoSMTsM2cV_3UM3nDO5DI"
+    api_key = "AIzaSyArIm3sQ0SlNiseIfKWmGacgeIcRsAhePY"
+
 
     # Get credentials and create an API client
     # flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(

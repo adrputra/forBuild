@@ -188,11 +188,11 @@ def TikTok(tag,n):
     cleanFileData("Tiktok")
     driver.maximize_window()
     driver.get(f"https://www.tiktok.com/search/video?q=%23{tag}")
-    driver.implicitly_wait(5)
+    # driver.implicitly_wait(5)
     load_cookie(driver, tiktokCookiePath)
     time.sleep(2.7923)
     driver.refresh()
-    time.sleep(1.2485)
+    time.sleep(3.2485)
     driver.implicitly_wait(5)
     vId = []
     try:
@@ -206,9 +206,11 @@ def TikTok(tag,n):
                 driver.find_element_by_xpath("//button[@data-e2e='search-load-more']").click()
                 time.sleep(1.234)
             driver.implicitly_wait(1)
+        print("Please wait..! Getting Data ..")
         result = getTikTokAPI(tag, vId)
     except NoSuchElementException as e:
         print("NoSuchElementException", str(e))
+        print("Please wait..! Getting Data ..")
         result = getTikTokAPI(tag, vId)
     
     print(vId)
@@ -220,7 +222,7 @@ def Instagram(tag, n):
     cleanFileData("Instagram")
     driver.maximize_window()
     driver.get(f"https://www.instagram.com/explore/tags/{tag}/")
-    driver.implicitly_wait(5)
+    # driver.implicitly_wait(5)
     load_cookie(driver, instagramCookiePath)
     time.sleep(2.7923)
     driver.refresh()
@@ -234,12 +236,12 @@ def Instagram(tag, n):
                 id = driver.find_element_by_xpath(f"//article//div[@class='_aaq8']//div[@class='_ac7v _aang'][{i+1}]//div[@class='_aabd _aa8k _aanf'][{j+1}]//a").get_attribute('href')
                 print(id)
                 igID.append(id.split("/")[4])
-        for i in range(n):
+        for i in range(n//3):
             for j in range(3):
                 id = driver.find_element_by_xpath(f"//article//div[2]//div[@class='_ac7v _aang'][{i+1}]//div[@class='_aabd _aa8k _aanf'][{j+1}]//a").get_attribute('href')
                 print(id)
                 igID.append(id.split("/")[4])
-            driver.execute_script("window.scrollBy(0, 10000)")
+            driver.execute_script("window.scrollBy(0, document.body.scrollHeight)")
             time.sleep(3)
         result = handlerAPI.getInstagramAPI(tag,igID)
     except NoSuchElementException:

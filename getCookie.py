@@ -42,6 +42,6 @@ def getCookieFacebook():
     print("COokie saved")
     driver.implicitly_wait(2)
 
-# getCookieInstagram()
+getCookieInstagram()
 # getCookieTiktok()
-getCookieFacebook()
+# getCookieFacebook()
