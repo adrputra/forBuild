@@ -58,16 +58,3 @@ def parseInstagramResponse(tag,response):
 
         except KeyError as e:
             print(str(e))
-
-
-
-        # result = response.json()
-    #     # result = response.text
-    #     # print(result["data"]["like_count"])
-    #     caption = result["data"]["caption"]["text"]
-    #     likes = result["data"]["like_count"]
-    #     views = "" #sebenarnya untuk viewnya ada view_count tapi gua mau kondisiin error ndra coba nanti kalo bisa gua tes lagi
-    #     data.append([caption, likes, views])
-    # print(data)
-
-# getInstagramAPI("g20",['ClBP_2YvA5S'])
