@@ -233,11 +233,15 @@ def Instagram(tag, n):
     igID = []
     # Top Post
     try:
-        for i in range(3):
-            for j in range(3):
-                id = driver.find_element_by_xpath(f"//article//div[@class='_aaq8']//div[@class='_ac7v _aang'][{i+1}]//div[@class='_aabd _aa8k _aanf'][{j+1}]//a").get_attribute('href')
-                print(id)
-                igID.append(id.split("/")[4])
+        try:
+            for i in range(4):
+                for j in range(3):
+                    id = driver.find_element_by_xpath(f"//article//div[@class='_aaq8']//div[@class='_ac7v _aang'][{i+1}]//div[@class='_aabd _aa8k _aanf'][{j+1}]//a").get_attribute('href')
+                    print(id)
+                    igID.append(id.split("/")[4])
+        except NoSuchElementException as e:
+            print(str(e))
+
         for i in range(n//3):
             for j in range(3):
                 id = driver.find_element_by_xpath(f"//article//div[2]//div[@class='_ac7v _aang'][{i+1}]//div[@class='_aabd _aa8k _aanf'][{j+1}]//a").get_attribute('href')
