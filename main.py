@@ -258,6 +258,7 @@ def Instagram(tag, n):
     writeToFile(result, igID, "I")
     messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Instagram")
     print("COMPLETE INSTAGRAM")
+    driver.close()
 
 def InstagramV2(tag,n):
     cleanFileData("Instagram")
