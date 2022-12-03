@@ -14,11 +14,6 @@ facebookCookiePath = "facebookCookie.txt"
 
 def getCookieTiktok():
     driver.get("https://www.tiktok.com/")
-    # login = driver.find_element_by_xpath("//button[@data-e2e='top-login-button']")
-    # login.click()
-    # time.sleep(2)
-    # qr = driver.find_element_by_xpath("//a[@href='/login/qrcode']")
-    # qr.click()
     time.sleep(60)
     save_cookie(driver,tiktokCookiePath)
     print("COokie saved")
@@ -42,6 +37,6 @@ def getCookieFacebook():
     print("COokie saved")
     driver.implicitly_wait(2)
 
-getCookieInstagram()
-# getCookieTiktok()
+# getCookieInstagram()
+getCookieTiktok()
 # getCookieFacebook()

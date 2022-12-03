@@ -122,7 +122,7 @@ def Youtube(tag,n):
         print("COMPLETE YOUTUBE")
 
     cleanFileData("Youtube")
-    driver.get(f"https://www.youtube.com/results?search_query=%23{tag}&sp=CAMSAhABQgUSA2cyMA%253D%253D")
+    driver.get(f"https://www.youtube.com/results?search_query=%23{tag}&sp=EgIIBUINEgtmYWJuMmphdGVuZw%253D%253D")
     links = []
     vidTag = []
 
@@ -151,6 +151,7 @@ def Youtube(tag,n):
         getLikesYoutubeAPI(tag, breakList(links), vidTag)
         
     print(links)
+    driver.close()
 
 
 def TikTok(tag,n):
@@ -217,6 +218,7 @@ def TikTok(tag,n):
     writeToFile(result, vId, "T")
     messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Tiktok")
     print("COMPLETE TIKTOK")
+    driver.close()
 
 def Instagram(tag, n):
     cleanFileData("Instagram")
