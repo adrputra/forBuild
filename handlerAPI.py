@@ -38,7 +38,7 @@ def getDataSheetFacebook():
         authorized_user_filename='storage.json'
     )
 
-    sh = gc.open_by_key('1YEASkGcKplYsbDSSw0G8r6WRxGcQ5Q9UvG6k0fzIbYI')
+    sh = gc.open_by_key('1H-iD-mZnIH0b4WGQJlbUuafvPeEH1BLgR5w_RIBuWTk')
 
     result = sh.sheet1.col_values(3)
 

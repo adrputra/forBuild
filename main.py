@@ -408,7 +408,30 @@ def Facebook(tag, n):
 
 def FacebookV2(tag,n):
 
-    def autoGetData(postLink,namePath,likePath,commentPath,sharePath):
+    def parseLike(like):
+        fLike = like.split(" ")
+        if len(fLike) == 1:
+            return like
+        elif "," in fLike[0] and fLike[1] == "rb":
+            return fLike[0].split(',')[0] + fLike[0].split(',')[1] + "00"
+        elif fLike[1] == "rb":
+            return fLike[0] + "000"
+        else:
+            return like
+    
+    def parseComment(comment):
+        fComment = comment.split(" ")
+        if len(fComment) == 2:
+            return fComment[0]
+        elif len(fComment) == 3:
+            if "," in fComment[0]:
+                return fComment[0].split(',')[0] + fComment[0].split(',')[1] + "00"
+            else:
+                return fComment[0] + "000"
+        else:
+            return comment
+
+    def autoGetData(postLink,namePath,likePath,commentPath,sharePath,tag):
         postLink = ""
         name = ""
         like = ""
@@ -427,9 +450,17 @@ def FacebookV2(tag,n):
         if check(sharePath):
             share = driver.find_element_by_xpath(sharePath).text
         
-        return [item,name,like,comment,share,tag]
+        return [item,name,parseLike(like),parseComment(comment),share,tag]
 
     cleanFileData("Facebook")
+    driver.maximize_window()
+    driver.get(f"https://www.facebook.com/hashtag/{tag}")
+    load_cookie(driver, facebookCookiePath)
+    time.sleep(2.7923)
+    load_cookie(driver, facebookCookiePath)
+    time.sleep(2.7923)
+    driver.refresh()
+    time.sleep(3.2485)
     result = []
     postLink = handlerAPI.getDataSheetFacebook()
     for item in postLink:
@@ -458,7 +489,7 @@ def FacebookV2(tag,n):
 
 def check(xpath):
     try:
-        webdriver.find_element_by_xpath(xpath)
+        driver.find_element_by_xpath(xpath)
     except NoSuchElementException:
         return False
     return True
