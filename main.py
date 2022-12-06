@@ -35,7 +35,7 @@ def Controller(tag,n,path,platform):
         case "InstagramV2":
             InstagramV2(tag,n)
         case "Facebook":
-            Facebook(tag,n)
+            FacebookV2(tag,n)
 
 def load_cookie(driver, path):
     with open(path, 'rb') as cookiesfile:
@@ -262,7 +262,7 @@ def Instagram(tag, n):
 
 def InstagramV2(tag,n):
     cleanFileData("Instagram")
-    igID = handlerAPI.getDataSheet()
+    igID = handlerAPI.getDataSheetInstagram()
     result = handlerAPI.getInstagramAPIv2(tag, igID)
     print(igID)
     writeToFile(result, igID, "I")
@@ -405,3 +405,60 @@ def Facebook(tag, n):
     writeToFile(data, links, "F")
     messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Facebook")
     print("COMPLETE FACEBOOK")
+
+def FacebookV2(tag,n):
+
+    def autoGetData(postLink,namePath,likePath,commentPath,sharePath):
+        postLink = ""
+        name = ""
+        like = ""
+        comment = ""
+        share = ""
+
+        if check(namePath):
+            name = driver.find_element_by_xpath(namePath).text
+
+        if check(likePath):
+            like = driver.find_element_by_xpath(likePath).text
+
+        if check(commentPath):
+            comment = driver.find_element_by_xpath(commentPath).text
+
+        if check(sharePath):
+            share = driver.find_element_by_xpath(sharePath).text
+        
+        return [item,name,like,comment,share,tag]
+
+    cleanFileData("Facebook")
+    result = []
+    postLink = handlerAPI.getDataSheetFacebook()
+    for item in postLink:
+        driver.get(item)
+        if "/reel/" in item:
+            namePath = "//div[@class='x1n2onr6 x1ja2u2z x9f619 x78zum5 xdt5ytf x2lah0s x193iq5w']//a"
+            likePath = "//div[@class='x9f619 x1n2onr6 x1ja2u2z x78zum5 xdt5ytf x2lah0s x193iq5w x1xmf6yo x1e56ztr xzboxd6 x14l7nz5'][2]//div[@class='x9f619 x1n2onr6 x1ja2u2z x78zum5 xdt5ytf x2lah0s x193iq5w x6s0dn4 x1gslohp x12nagc xzboxd6 x14l7nz5'][2]//span[@class='x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft x1j85h84']"
+            commentPath = "//div[@class='x9f619 x1n2onr6 x1ja2u2z x78zum5 xdt5ytf x2lah0s x193iq5w x1xmf6yo x1e56ztr xzboxd6 x14l7nz5'][3]//div[@class='x9f619 x1n2onr6 x1ja2u2z x78zum5 xdt5ytf x2lah0s x193iq5w x6s0dn4 x1gslohp x12nagc xzboxd6 x14l7nz5'][2]//span[@class='x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft x1j85h84']"
+            sharePath = "//div[@class='x9f619 x1n2onr6 x1ja2u2z x78zum5 xdt5ytf x2lah0s x193iq5w x1xmf6yo x1e56ztr xzboxd6 x14l7nz5'][4]//div[@class='x9f619 x1n2onr6 x1ja2u2z x78zum5 xdt5ytf x2lah0s x193iq5w x6s0dn4 x1gslohp x12nagc xzboxd6 x14l7nz5'][2]//span[@class='x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft x1j85h84']"
+        
+            result.append(autoGetData(item,namePath,likePath,commentPath,sharePath,tag))
+                
+        elif "/posts/" in item:
+            namePath = "//div[@class='x1swvt13 x1pi30zi xyamay9']//span//h2//strong//span"
+            likePath = "//div[@class='x78zum5 xdt5ytf x1huibft x1n6yrxt']//div[@class='x6s0dn4 xi81zsa x78zum5 x1a02dak x13a6bvl xyesn5m x6ikm8r x10wlt62']//div[@class='x6s0dn4 x78zum5 x1iyjqo2 x13a6bvl x6ikm8r x10wlt62']//div[@role='button']//span[@class='x4k7w5x x1h91t0o x1h9r5lt xv2umb2 x1beo9mf xaigb6o x12ejxvf x3igimt xarpa2k xedcshv x1lytzrv x1t2pt76 x7ja8zs x1qrby5j x1jfb8zj']"
+            commentPath = "//div[@class='x78zum5 xdt5ytf x1huibft x1n6yrxt']//div[@class='x6s0dn4 xi81zsa x78zum5 x1a02dak x13a6bvl xyesn5m x6ikm8r x10wlt62']//div[@class='x6s0dn4 x78zum5 x2lah0s']//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x4zkp8e x676frb x1nxh6w3 x1sibtaa xo1l8bm xi81zsa']"
+            sharePath = "//div[@class='x78zum5 xdt5ytf x1huibft x1n6yrxt']//div[@class='x6s0dn4 xi81zsa x78zum5 x1a02dak x13a6bvl xyesn5m x6ikm8r x10wlt62']//span[@class='_26fq']//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x4zkp8e x676frb x1nxh6w3 x1sibtaa xo1l8bm xi81zsa']"
+        
+            result.append(autoGetData(item,namePath,likePath,commentPath,sharePath,tag))
+        else:
+            pass
+    
+    writeToFile(result, postLink, "F")
+    messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Facebook")
+    print("COMPLETE FACEBOOK")
+
+def check(xpath):
+    try:
+        webdriver.find_element_by_xpath(xpath)
+    except NoSuchElementException:
+        return False
+    return True

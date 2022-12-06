@@ -13,7 +13,7 @@ import googleapiclient.discovery
 import googleapiclient.errors
 
 
-def getDataSheet():
+def getDataSheetInstagram():
     gc = gspread.oauth(
         credentials_filename='client_secrest.json',
         authorized_user_filename='storage.json'
@@ -31,6 +31,25 @@ def getDataSheet():
     return IgID
 
 # getDataSheet()
+
+def getDataSheetFacebook():
+    gc = gspread.oauth(
+        credentials_filename='client_secrest.json',
+        authorized_user_filename='storage.json'
+    )
+
+    sh = gc.open_by_key('1YEASkGcKplYsbDSSw0G8r6WRxGcQ5Q9UvG6k0fzIbYI')
+
+    result = sh.sheet1.col_values(3)
+
+    postLink = []
+    
+    for i in range(1,len(result)):
+        postLink.append(result[i])
+    
+    print(postLink)
+    return postLink
+
 
 def getInstagramAPI(tag,links):
     data = []
