@@ -18,5 +18,5 @@
 # p.click(861,485)
 # # p.click(1178, 567)
 
-a = "https://www.instagram.com/p/Cl-l18vJ9_b/"
-print(a.split("p/")[1].split("/")[0])
+a = "https://www.instagram.com/reel/Cl-d3GSDGbi/?igshid=NDk5N2NlZjQ="
+print(a.split('reel')[1].split('/')[1])
