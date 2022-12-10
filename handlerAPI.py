@@ -26,7 +26,7 @@ def getDataSheetInstagram():
     IgID = []
 
     for i in range(1,len(result)):
-        IgID.append(result[i].split('reel')[1].split('/')[1])
+        IgID.append(result[i].split("p/")[1].split("/")[0])
     print(IgID)
     return IgID
 
