@@ -13,13 +13,14 @@ import googleapiclient.discovery
 import googleapiclient.errors
 
 
-def getDataSheetInstagram():
+def getDataSheetInstagram(link):
     gc = gspread.oauth(
         credentials_filename='client_secrest.json',
         authorized_user_filename='storage.json'
     )
 
-    sh = gc.open_by_key('18k_NEd0jVj6x0gBcF0dAM3CF9O-lKJES5J5DJLbSZ5E')
+    sh = gc.open_by_key(link)
+    # sh = gc.open_by_key('18k_NEd0jVj6x0gBcF0dAM3CF9O-lKJES5J5DJLbSZ5E')
 
     result = sh.sheet1.col_values(3)
 
@@ -36,13 +37,14 @@ def getDataSheetInstagram():
 
 # getDataSheet()
 
-def getDataSheetFacebook():
+def getDataSheetFacebook(link):
     gc = gspread.oauth(
         credentials_filename='client_secrest.json',
         authorized_user_filename='storage.json'
     )
 
-    sh = gc.open_by_key('1H-iD-mZnIH0b4WGQJlbUuafvPeEH1BLgR5w_RIBuWTk')
+    sh = gc.open_by_key(link)
+    # sh = gc.open_by_key('1H-iD-mZnIH0b4WGQJlbUuafvPeEH1BLgR5w_RIBuWTk')
 
     result = sh.sheet1.col_values(3)
 

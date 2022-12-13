@@ -22,7 +22,7 @@ tiktokCookiePath = r"tiktokCookie.txt"
 instagramCookiePath = r"instagramCookie.txt"
 facebookCookiePath = r"facebookCookie.txt"
 
-def Controller(tag,n,path,platform):
+def Controller(tag,n,path,platform,link):
     global dirPath
     dirPath = path
     match platform:
@@ -33,9 +33,11 @@ def Controller(tag,n,path,platform):
         case "Instagram":
             Instagram(tag,n)
         case "InstagramV2":
-            InstagramV2(tag,n)
+            InstagramV2(tag,n,link)
         case "Facebook":
-            FacebookV2(tag,n)
+            Facebook(tag,n)
+        case "FacebookV2":
+            FacebookV2(tag,n,link)
 
 def load_cookie(driver, path):
     with open(path, 'rb') as cookiesfile:
@@ -260,9 +262,9 @@ def Instagram(tag, n):
     print("COMPLETE INSTAGRAM")
     driver.close()
 
-def InstagramV2(tag,n):
+def InstagramV2(tag,n,link):
     cleanFileData("Instagram")
-    igID = handlerAPI.getDataSheetInstagram()
+    igID = handlerAPI.getDataSheetInstagram(link)
     result = handlerAPI.getInstagramAPIv2(tag, igID)
     print(igID)
     writeToFile(result, igID, "I")
@@ -406,7 +408,7 @@ def Facebook(tag, n):
     messagebox.showinfo(title="Data Extract Complete", message="Successfully extract data from Facebook")
     print("COMPLETE FACEBOOK")
 
-def FacebookV2(tag,n):
+def FacebookV2(tag,n,link):
 
     def parseLike(like):
         fLike = like.split(" ")
@@ -462,7 +464,7 @@ def FacebookV2(tag,n):
     driver.refresh()
     time.sleep(3.2485)
     result = []
-    postLink = handlerAPI.getDataSheetFacebook()
+    postLink = handlerAPI.getDataSheetFacebook(link)
     for item in postLink:
         driver.get(item)
         if "/reel/" in item:
