@@ -276,7 +276,7 @@ def Facebook(tag, n):
     def getName(i):
         try:
             print("Name",end=" ")
-            xpath = f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//span[@dir='ltr'][1]//span[@class='xt0psk2']//span"
+            xpath = f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//span[@class='xt0psk2']//span"
             name = driver.find_element_by_xpath(xpath).text
             print(name)
             return name
@@ -331,7 +331,8 @@ def Facebook(tag, n):
     
     def getPostLink(i):
         try:
-            postLink = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//div[@class='xu06os2 x1ok221b'][2]//a").get_attribute('href')
+            # postLink = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1iyjqo2']//div[@class='xu06os2 x1ok221b'][2]//a").get_attribute('href')
+            postLink = driver.find_element_by_xpath(f"//div[@class='x9f619 x1n2onr6 x1ja2u2z xeuugli xs83m0k x1xmf6yo x1emribx x1e56ztr x1i64zmx xjl7jj x19h7ccj xu9j1y6 x7ep2pv']//div[{i+1}]//div[@class='x1yztbdb x1n2onr6 xh8yej3 x1ja2u2z']//div[@class='x1n2onr6']//div[@class='x1n2onr6']//a[1]").get_attribute('href')
             print(postLink)
             return postLink
         except NoSuchElementException as e:
@@ -395,9 +396,15 @@ def Facebook(tag, n):
         comment = getComment(i)
         share = getShare(i)
         postLink = getPostLink(i)
+        formattedPostLink = ""
+        if "photo" in postLink:
+            links.append(postLink.split('&set=')[0])
+            formattedPostLink = postLink.split('&set=')[0]
+        else:
+            links.append(postLink.split('/?')[0])
+            formattedPostLink = postLink.split('/?')[0]
 
-        links.append(postLink.split('/?')[0])
-        data.append([postLink.split('/?')[0], name, parseLike(like), parseComment(comment), parseShare(share), tag])
+        data.append([formattedPostLink, name, parseLike(like), parseComment(comment), parseShare(share), tag])
         if i==7 or i%10 == 0:
             driver.execute_script("window.scrollBy(0, document.body.scrollHeight)")
             time.sleep(3.432)
@@ -434,11 +441,7 @@ def FacebookV2(tag,n,link):
             return comment
 
     def autoGetData(postLink,namePath,likePath,commentPath,sharePath,tag):
-        postLink = ""
-        name = ""
-        like = ""
-        comment = ""
-        share = ""
+        postLink, name, like, comment, share = "", "", "", "", ""
 
         if check(namePath):
             name = driver.find_element_by_xpath(namePath).text
@@ -452,7 +455,7 @@ def FacebookV2(tag,n,link):
         if check(sharePath):
             share = driver.find_element_by_xpath(sharePath).text
         
-        return [item,name,parseLike(like),parseComment(comment),share,tag]
+        return [postLink,name,parseLike(like),parseComment(comment),share,tag]
 
     cleanFileData("Facebook")
     driver.maximize_window()
